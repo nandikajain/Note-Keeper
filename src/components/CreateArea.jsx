@@ -1,7 +1,10 @@
 import React from "react";
-
+import AddOutlinedIcon from "@material-ui/icons/AddOutlined";
+import Fab from "@material-ui/core/Fab";
+import Zoom from "@material-ui/core/Zoom";
 
 function CreateArea(props) {
+  const [expand, setExpand] = React.useState(false);
   const [note, setNote] = React.useState({
     title: "",
     content: ""
@@ -18,32 +21,42 @@ function CreateArea(props) {
   function handleSubmit(event) {
     event.preventDefault();
   }
+  function updateExpand() {
+    setExpand(true);
+  }
   return (
     <div>
       <form onSubmit={handleSubmit} className="create-note">
-        <input
-          name="title"
-          placeholder="Title"
-          onChange={addNote}
-          value={note.title}
-        />
+        {expand && (
+          <input
+            name="title"
+            placeholder="Title"
+            onChange={addNote}
+            value={note.title}
+          />
+        )}
+
         <textarea
           name="content"
           placeholder="Take a note..."
-          rows="3"
+          rows={expand ? "3" : "1"}
           onChange={addNote}
           value={note.content}
+          onClick={updateExpand}
         />
-        <button
-          onClick={() => {
-            props.addItem(note);
-            setNote({
-              title: "",
-              content: ""
-            });
-          }}
-        >
-+        </button>
+        <Zoom in={expand ? true : false}>
+          <Fab
+            onClick={() => {
+              props.addItem(note);
+              setNote({
+                title: "",
+                content: ""
+              });
+            }}
+          >
+            <AddOutlinedIcon />
+          </Fab>
+        </Zoom>
       </form>
     </div>
   );
